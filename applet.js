@@ -22,11 +22,16 @@ MyApplet.prototype = {
         this.menu = new Applet.AppletPopupMenu(this, orientation);
         this.menuManager.addMenu(this.menu);
         
+        this.urlEntryBox = new St.BoxLayout({});
+        this.menu.addActor(this.urlEntryBox);
+        
+        this.urlEntryBox.add(new St.Label({text: ' '}));
         this.urlEntryField = new St.Entry({name: 'url-entry', 
                                             hint_text: _('Enter a stream URL'),
                                             track_hover: true,
                                             can_focus: true});
-        this.menu.addActor(this.urlEntryField);
+        this.urlEntryBox.add(this.urlEntryField);
+        this.urlEntryBox.add(new St.Label({text: ' '}));
         
         this.urlEntryField.clutter_text.connect('key-press-event', Lang.bind(this, this._keyPressed));
         this.urlEntryField.connect('key-press-event', Lang.bind(this, this._keyPressed));
