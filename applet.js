@@ -1,7 +1,9 @@
 const Applet = imports.ui.applet;
-const Util = imports.misc.util;
+const Clutter = imports.gi.Clutter;
+const Lang = imports.lang;
 const PopupMenu = imports.ui.popupMenu;
 const St = imports.gi.St;
+const Util = imports.misc.util;
 
 function MyApplet(orientation, panel_height, instance_id) {
     this._init(orientation, panel_height, instance_id);
@@ -20,31 +22,43 @@ MyApplet.prototype = {
         this.menu = new Applet.AppletPopupMenu(this, orientation);
         this.menuManager.addMenu(this.menu);
         
-        this.urlEntryArea = new St.Entry({name: 'url-entry', 
+        this.urlEntryField = new St.Entry({name: 'url-entry', 
                                             hint_text: _('Enter a stream URL'),
                                             track_hover: true,
                                             can_focus: true});
-        this.menu.addActor(this.urlEntryArea);
+        this.menu.addActor(this.urlEntryField);
+        
+        this.urlEntryField.clutter_text.connect('key-press-event', Lang.bind(this, this._keyPressed));
+        this.urlEntryField.connect('key-press-event', Lang.bind(this, this._keyPressed));
         
         this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
-        this.menu.addAction(_("Watch URL"), function(event) {
-            Util.spawnCommandLine('livestreamer ' + this.urlEntryArea.get_text());
-        });
+        
+        this.startButton = new St.Button({label: "Start Stream"});
+        this.startButton.connect('clicked', Lang.bind(this, this._loadStream));
+        this.menu.addActor(this.startButton);
         
         this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
-        this.menu.addAction(_("Watch Summit1g"), function(event) {
-            loadStream('twitch.tv/summit1g', 'best');
-        });
-        
-        this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
-        this.menu.addAction(_("Watch JoshOG"), function(event) {
-            loadStream('twitch.tv/joshog', 'best');
-        });
     },
     
     on_applet_clicked: function(){
         this.menu.toggle();
     },
+    
+    _loadStream: function(){
+        loadStream(this.urlEntryField.get_text(), 'best');
+        this.urlEntryField.set_text("");
+        this.menu.close();
+    },
+    
+    _textChanged: function(){
+        
+    },
+    
+    _keyPressed: function(actor, event){
+        if(event.get_key_symbol() == Clutter.KEY_Return && this.menu.isOpen){
+            this._loadStream();
+        }
+    }
 };
 
 function main(metadata, orientation, panel_height, instance_id) {
