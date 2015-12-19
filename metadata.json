@@ -1,6 +1,6 @@
 {
-    "uuid": "livestreamer@kysuther.com",
+    "uuid": "livestreamer-applet@kysuther.com",
     "name": "Livestreamer Applet",
     "description": "Visual frontend applet for the livestreamer cli program.",
-    "icon": ""
+    "icon": "video-x-generic"
 }
