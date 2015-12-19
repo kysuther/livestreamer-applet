@@ -49,7 +49,6 @@ MyApplet.prototype = {
     
     _loadStream: function(){
         loadStream(this.urlEntryField.get_text(), 'best');
-        this.urlEntryField.set_text("");
         this.menu.close();
     },
     
