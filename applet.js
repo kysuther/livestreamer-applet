@@ -31,13 +31,11 @@ MyApplet.prototype = {
         this.urlEntryField.clutter_text.connect('key-press-event', Lang.bind(this, this._keyPressed));
         this.urlEntryField.connect('key-press-event', Lang.bind(this, this._keyPressed));
         
-        this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
-        
         this.startButton = new PopupMenu.PopupMenuItem("Start Stream");
         this.startButton.connect('activate', Lang.bind(this, this._loadStream));
         this.menu.addMenuItem(this.startButton);
         
-        this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+        //this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
     },
     
     on_applet_clicked: function(){
