@@ -16,7 +16,7 @@ MyApplet.prototype = {
         Applet.IconApplet.prototype._init.call(this, orientation, panel_height, instance_id);
         
         this.set_applet_tooltip(_("Watch a stream"));
-        this.set_applet_icon_name("exit");
+        this.set_applet_icon_name("video-x-generic");
         
         this.menuManager = new PopupMenu.PopupMenuManager(this);
         this.menu = new Applet.AppletPopupMenu(this, orientation);
@@ -33,9 +33,9 @@ MyApplet.prototype = {
         
         this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
         
-        this.startButton = new St.Button({label: "Start Stream"});
-        this.startButton.connect('clicked', Lang.bind(this, this._loadStream));
-        this.menu.addActor(this.startButton);
+        this.startButton = new PopupMenu.PopupMenuItem("Start Stream");
+        this.startButton.connect('activate', Lang.bind(this, this._loadStream));
+        this.menu.addMenuItem(this.startButton);
         
         this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
     },
@@ -48,10 +48,6 @@ MyApplet.prototype = {
         loadStream(this.urlEntryField.get_text(), 'best');
         this.urlEntryField.set_text("");
         this.menu.close();
-    },
-    
-    _textChanged: function(){
-        
     },
     
     _keyPressed: function(actor, event){
